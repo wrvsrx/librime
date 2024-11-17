@@ -12,6 +12,7 @@
 #include <rime/key_event.h>
 #include <rime/schema.h>
 #include <rime/gear/ascii_composer.h>
+#include <rime/switcher.h>
 
 namespace rime {
 
@@ -236,6 +237,13 @@ void AsciiComposer::SwitchAsciiMode(bool ascii_mode,
   }
   // refresh non-confirmed composition with new mode
   ctx->set_option("ascii_mode", ascii_mode);
+  auto switcher = this->engine_->switcher_;
+  if (switcher->IsAutoSave("ascii_mode")) {
+    if (Config* user_config = switcher->user_config()) {
+      user_config->SetBool("var/option/" + std::string("ascii_mode"),
+                           ascii_mode);
+    }
+  }
 }
 
 void AsciiComposer::OnContextUpdate(Context* ctx) {
@@ -243,6 +251,12 @@ void AsciiComposer::OnContextUpdate(Context* ctx) {
     connection_.disconnect();
     // quit temporary ascii mode
     ctx->set_option("ascii_mode", false);
+    auto switcher = this->engine_->switcher_;
+    if (switcher->IsAutoSave("ascii_mode")) {
+      if (Config* user_config = switcher->user_config()) {
+        user_config->SetBool("var/option/" + std::string("ascii_mode"), false);
+      }
+    }
   }
 }
 
