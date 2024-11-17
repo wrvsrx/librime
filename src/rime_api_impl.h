@@ -15,6 +15,8 @@
 #include <rime/setup.h>
 #include <rime/signature.h>
 #include <rime/switches.h>
+#include <rime/engine.h>
+#include <rime/switcher.h>
 
 #include "rime_api.h"
 
@@ -426,6 +428,13 @@ RIME_DEPRECATED void RimeSetOption(RimeSessionId session_id,
   if (!ctx)
     return;
   ctx->set_option(option, !!value);
+  auto engine = session->engine_.get();
+  auto switcher = engine->switcher_;
+  if (switcher->IsAutoSave(option)) {
+    if (Config* user_config = switcher->user_config()) {
+      user_config->SetBool("var/option/" + std::string(option), value);
+    }
+  }
 }
 
 RIME_DEPRECATED Bool RimeGetOption(RimeSessionId session_id,

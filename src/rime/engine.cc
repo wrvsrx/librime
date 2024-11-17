@@ -52,7 +52,6 @@ class ConcreteEngine : public Engine {
   vector<of<Filter>> filters_;
   vector<of<Formatter>> formatters_;
   vector<of<Processor>> post_processors_;
-  an<Switcher> switcher_;
 };
 
 // implementations

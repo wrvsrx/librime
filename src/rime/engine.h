@@ -16,6 +16,7 @@ namespace rime {
 class KeyEvent;
 class Schema;
 class Context;
+class Switcher;
 
 class Engine : public Messenger {
  public:
@@ -35,6 +36,7 @@ class Engine : public Messenger {
   void set_active_engine(Engine* engine = nullptr) { active_engine_ = engine; }
 
   RIME_API static Engine* Create();
+  an<Switcher> switcher_;
 
  protected:
   Engine();

@@ -44,11 +44,11 @@ class Session {
   Schema* schema() const;
   time_t last_active_time() const { return last_active_time_; }
   const string& commit_text() const { return commit_text_; }
+  the<Engine> engine_;
 
  private:
   void OnCommit(const string& commit_text);
 
-  the<Engine> engine_;
   time_t last_active_time_ = 0;
   string commit_text_;
 };
